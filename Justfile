@@ -5,7 +5,11 @@ install:
     rm -rf modules
     jresolve --output-directory modules @deps
 
+clean:
+    rm -rf target
+
 compile:
+    rm -rf target/classes
     javac \
         -g \
         --source-path ./src/ \
