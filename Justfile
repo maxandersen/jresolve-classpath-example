@@ -33,7 +33,7 @@ run:
       --add-modules ALL-MODULE-PATH \
       home.Main
 
-exe:
+exe_broken:
     rm -rf home
     native-image \
         --class-path target/classes \
@@ -44,7 +44,7 @@ exe:
         -jar target/jars/main.jar \
         home
 
-exe2:
+exe:
     rm -rf home
     native-image \
         --class-path target/classes \
