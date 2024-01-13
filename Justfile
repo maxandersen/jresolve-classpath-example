@@ -2,8 +2,8 @@ help:
     just --list
 
 install:
-    rm -rf modules
-    jresolve --output-directory modules @deps
+    rm -rf lib deps.jar
+    jbang --verbose export portable deps
 
 clean:
     rm -rf target
@@ -14,7 +14,7 @@ compile:
         -g \
         --source-path ./src/ \
         -d target/classes \
-        --module-path modules \
+        --module-path lib \
         --add-modules ALL-MODULE-PATH \
         src/home/Main.java
 
@@ -29,7 +29,7 @@ compile:
 run:
     java \
       --class-path target/classes \
-      --module-path modules \
+      --module-path lib \
       --add-modules ALL-MODULE-PATH \
       home.Main
 
@@ -37,7 +37,7 @@ exe_broken: compile
     rm -rf home
     native-image \
         --class-path target/classes \
-        --module-path modules \
+        --module-path lib \
         --add-modules ALL-MODULE-PATH \
         -H:+UnlockExperimentalVMOptions \
         -H:+ReportUnsupportedElementsAtRuntime \
@@ -48,7 +48,7 @@ exe: compile
     rm -rf home
     native-image \
         --class-path target/classes \
-        --module-path modules/jackson-core-2.16.1.jar \
+        --module-path lib/jackson-core-2.16.1.jar \
         --add-modules ALL-MODULE-PATH \
         -H:+UnlockExperimentalVMOptions \
         -H:+ReportUnsupportedElementsAtRuntime \
