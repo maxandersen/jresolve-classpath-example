@@ -1,59 +1,18 @@
 help:
     just --list
 
-install:
-    rm -rf modules
-    jresolve --output-directory modules @deps
-
 clean:
     rm -rf target
+    jbang cache clear
 
 compile:
-    rm -rf target/classes
-    javac \
-        -g \
-        --source-path ./src/ \
-        -d target/classes \
-        --module-path modules \
-        --add-modules ALL-MODULE-PATH \
-        src/home/Main.java
-
-    rm -rf target/jars
-
-    jar \
-      --create \
-      --file target/jars/main.jar \
-      --main-class home.Main \
-      -C target/classes .
+    jbang export portable -O target/jars/main.jar src/home/Main.java
 
 run:
-    java \
-      --class-path target/classes \
-      --module-path modules \
-      --add-modules ALL-MODULE-PATH \
-      home.Main
+    jbang src/home/Main.java
 
-exe_broken: compile
-    rm -rf home
-    native-image \
-        --class-path target/classes \
-        --module-path modules \
-        --add-modules ALL-MODULE-PATH \
-        -H:+UnlockExperimentalVMOptions \
-        -H:+ReportUnsupportedElementsAtRuntime \
-        -jar target/jars/main.jar \
-        home
-
-exe: compile
-    rm -rf home
-    native-image \
-        --class-path target/classes \
-        --module-path modules/jackson-core-2.16.1.jar \
-        --add-modules ALL-MODULE-PATH \
-        -H:+UnlockExperimentalVMOptions \
-        -H:+ReportUnsupportedElementsAtRuntime \
-        -jar target/jars/main.jar \
-        home
-
+exe: 
+    jbang export native -O home src/home/Main.java
+    
 run_exe:
     ./home
